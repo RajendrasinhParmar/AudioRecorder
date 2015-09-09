@@ -19,18 +19,36 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSError *error;
     //Set the audio file
-    NSArray *pathComponents = [NSArray arrayWithObjects:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject], @"pelluAudio.wav", nil];
+    NSArray *pathComponents = [NSArray arrayWithObjects:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject], @"pelluAudio.m4a", nil];
     NSURL *outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
     
     //set audio session
     AVAudioSession *session = [AVAudioSession sharedInstance];
     [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     
-    audioRecorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:nil error:nil];
+    //Recording settings
+    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+    
+    [settings setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
+    [settings setValue:[NSNumber numberWithFloat:12000.0] forKey:AVSampleRateKey];
+    [settings setValue:[NSNumber numberWithInt:1] forKey:AVNumberOfChannelsKey];
+//    [settings setValue:[NSNumber numberWithInt:16] forKey:AVLinearPCMBitDepthKey];
+//    [settings setValue:[NSNumber numberWithBool:NO] forKey:AVLinearPCMIsBigEndianKey];
+//    [settings setValue:[NSNumber numberWithBool:NO] forKey:AVLinearPCMIsFloatKey];
+    [settings setValue:[NSNumber numberWithInt:AVAudioQualityMax] forKey:AVEncoderAudioQualityKey];
+    
+    
+    audioRecorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:settings error:&error];
+    if(!audioRecorder){
+        NSLog(@"Error establishing recorder: %@",error.localizedFailureReason);
+    }
     audioRecorder.delegate = self;
     audioRecorder.meteringEnabled = YES;
-    [audioRecorder prepareToRecord];
+    if(![audioRecorder prepareToRecord]){
+        NSLog(@"Error: Record failed");
+    }
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -64,10 +82,16 @@
     if (flag) {
         NSLog(@"File successfully written at path : %@",[recorder.url absoluteString]);
         //NSDictionary *fileDictionary = [[NSFileManager defaultManager] fileAttributesAtPath:[recorder.url absoluteString] traverseLink:YES];
-        NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[recorder.url absoluteString] error:nil];
-        NSNumber *fileSizeNumber = [fileDictionary objectForKey:NSFileSize];
-        unsigned long long fileSize = [fileSizeNumber longLongValue];
-        NSLog(@"File Size is %llu",fileSize);
+//        NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[recorder.url absoluteString] error:nil];
+//        NSNumber *fileSizeNumber = [fileDictionary objectForKey:NSFileSize];
+//        long long fileSize = [fileSizeNumber longLongValue];
+//        NSLog(@"File Size is %lld",fileSize);
+        NSNumber *thesize;
+        NSInteger fileSize = 0;
+        if([recorder.url getResourceValue:&thesize forKey:NSURLFileSizeKey error:nil]){
+            fileSize = [thesize integerValue];
+        }
+        NSLog(@"File size is %ld",(long)fileSize);
     }else{
         NSLog(@"File not written");
     }
