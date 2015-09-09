@@ -14,6 +14,7 @@
 		0909A7161B9FCFC300A151EC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0909A7151B9FCFC300A151EC /* Images.xcassets */; };
 		0909A7191B9FCFC300A151EC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0909A7171B9FCFC300A151EC /* LaunchScreen.xib */; };
 		0909A7251B9FCFC300A151EC /* AudioRecorderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0909A7241B9FCFC300A151EC /* AudioRecorderTests.m */; };
+		0909A72F1B9FD4F900A151EC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0909A72E1B9FD4F900A151EC /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		0909A71E1B9FCFC300A151EC /* AudioRecorderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioRecorderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0909A7231B9FCFC300A151EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0909A7241B9FCFC300A151EC /* AudioRecorderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioRecorderTests.m; sourceTree = "<group>"; };
+		0909A72E1B9FD4F900A151EC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0909A72F1B9FD4F900A151EC /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +66,7 @@
 		0909A6FC1B9FCFC200A151EC = {
 			isa = PBXGroup;
 			children = (
+				0909A72E1B9FD4F900A151EC /* AVFoundation.framework */,
 				0909A7071B9FCFC300A151EC /* AudioRecorder */,
 				0909A7211B9FCFC300A151EC /* AudioRecorderTests */,
 				0909A7061B9FCFC300A151EC /* Products */,
@@ -418,6 +422,7 @@
 				0909A72A1B9FCFC300A151EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0909A72B1B9FCFC300A151EC /* Build configuration list for PBXNativeTarget "AudioRecorderTests" */ = {
 			isa = XCConfigurationList;
@@ -426,6 +431,7 @@
 				0909A72D1B9FCFC300A151EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

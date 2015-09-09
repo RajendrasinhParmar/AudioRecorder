@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController < AVAudioRecorderDelegate>
 
+- (IBAction)recordAudio:(UIButton *)sender;
 
+- (IBAction)stopRecording:(UIButton *)sender;
 @end
 
