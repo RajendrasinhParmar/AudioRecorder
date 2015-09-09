@@ -1,3 +1,3 @@
 #Audio Recorder
 
-This Project is to demonstrate file recording
+This Project demonstrates audio recording
