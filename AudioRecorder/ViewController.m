@@ -87,6 +87,33 @@
             fileSize = [thesize integerValue];
         }
         NSLog(@"File size is %ld",(long)fileSize);
+        
+        NSData *audioData = [NSData dataWithContentsOfFile:[recorder.url absoluteString]];
+        NSString *urlString = @"http://localhost:8888/upload.php";
+        
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [request setURL:[NSURL URLWithString:urlString]];
+        [request setHTTPMethod:@"POST"];
+        
+        NSString *boundary = @"--aSd67Rt+--";
+        
+        NSString *contentType =[NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary];
+        [request addValue:contentType forHTTPHeaderField:@"Content-Type"];
+        
+        //POST body
+        
+        NSMutableData *body = [NSMutableData data];
+        NSString *contentDisc = [NSString stringWithFormat:@"Content-Disposition: form-data; name=\"userfile\"; filename=\"%@\"\r\n",@"myAudio.m4a"];
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[contentDisc dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[NSData dataWithData:audioData]];
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [request setHTTPBody:body];
+        
+        NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+        NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+        NSLog(@"%@",returnString);
     }else{
         NSLog(@"File not written");
     }
