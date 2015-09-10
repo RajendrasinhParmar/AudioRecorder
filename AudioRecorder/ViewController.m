@@ -81,11 +81,6 @@
 -(void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag{
     if (flag) {
         NSLog(@"File successfully written at path : %@",[recorder.url absoluteString]);
-        //NSDictionary *fileDictionary = [[NSFileManager defaultManager] fileAttributesAtPath:[recorder.url absoluteString] traverseLink:YES];
-//        NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[recorder.url absoluteString] error:nil];
-//        NSNumber *fileSizeNumber = [fileDictionary objectForKey:NSFileSize];
-//        long long fileSize = [fileSizeNumber longLongValue];
-//        NSLog(@"File Size is %lld",fileSize);
         NSNumber *thesize;
         NSInteger fileSize = 0;
         if([recorder.url getResourceValue:&thesize forKey:NSURLFileSizeKey error:nil]){
