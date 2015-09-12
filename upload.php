@@ -1,8 +1,8 @@
 <?php
 $msg = " ".var_dump($_FILES)." ";
-$new_image_name = $_FILES["userfile"]["name"];
-if(move_uploaded_file($_FILES["userfile"]["tmp_name"], getcwd() . "/uploads/" . $new_image_name)){
-	echo "The file".basename($_FILES["userfile"]["tmp_name"])." has been uploaded";
+$new_image_name = $_FILES["uploaded_file"]["name"];
+if(move_uploaded_file($_FILES["uploaded_file"]["tmp_name"], getcwd() . "/uploads/" . $new_image_name)){
+	echo "The file".basename($_FILES["uploaded_file"]["tmp_name"])." has been uploaded";
 }
 
 if(isset($_POST["value1"])){
