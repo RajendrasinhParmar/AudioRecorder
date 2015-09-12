@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#define TimeStamp [NSString stringWithFormat:@"%d", (int)[[NSDate date] timeIntervalSince1970]]
 
 @interface ViewController () {
     AVAudioRecorder *audioRecorder;
@@ -21,7 +22,9 @@
     
     NSError *error;
     //Set the audio file
-    NSArray *pathComponents = [NSArray arrayWithObjects:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject], @"pelluAudio.m4a", nil];
+    
+    NSString *fileName = [NSString stringWithFormat:@"%@.m4a",TimeStamp];
+    NSArray *pathComponents = [NSArray arrayWithObjects:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject], fileName, nil];
     NSURL *outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
     
     //set audio session
@@ -32,8 +35,8 @@
     NSMutableDictionary *settings = [NSMutableDictionary dictionary];
     
     [settings setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
-    [settings setValue:[NSNumber numberWithFloat:12000.0] forKey:AVSampleRateKey];
-    [settings setValue:[NSNumber numberWithInt:1] forKey:AVNumberOfChannelsKey];
+    [settings setValue:[NSNumber numberWithFloat:44100.0] forKey:AVSampleRateKey];
+    [settings setValue:[NSNumber numberWithInt:2] forKey:AVNumberOfChannelsKey];
 //    [settings setValue:[NSNumber numberWithInt:16] forKey:AVLinearPCMBitDepthKey];
 //    [settings setValue:[NSNumber numberWithBool:NO] forKey:AVLinearPCMIsBigEndianKey];
 //    [settings setValue:[NSNumber numberWithBool:NO] forKey:AVLinearPCMIsFloatKey];
@@ -88,8 +91,8 @@
         }
         NSLog(@"File size is %ld",(long)fileSize);
         
-        NSData *audioData = [NSData dataWithContentsOfFile:[recorder.url absoluteString]];
-        NSString *urlString = @"http://localhost:8888/upload.php";
+        NSData *audioData = [NSData dataWithContentsOfFile:[recorder.url path]];
+        NSString *urlString = @"http://localhost:8888/upload.php";//Use url of audio upload webservice
         
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
         [request setURL:[NSURL URLWithString:urlString]];
@@ -103,9 +106,8 @@
         //POST body
         
         NSMutableData *body = [NSMutableData data];
-        NSString *contentDisc = [NSString stringWithFormat:@"Content-Disposition: form-data; name=\"userfile\"; filename=\"%@\"\r\n",@"myAudio.m4a"];
-        [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[contentDisc dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"uploaded_file\"; filename=\"%@\"\r\n",[recorder.url lastPathComponent]] dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
         [body appendData:[NSData dataWithData:audioData]];
         [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
